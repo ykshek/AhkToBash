@@ -46,5 +46,12 @@
     </build>
     <dependencies>
     </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/ykshek/AhkToBash</url>
+        </repository>
+    </distributionManagement>
 </project>
 
