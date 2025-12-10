@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class Ahk_to_bash
+public class ahkToBash
 {
    public static void convert()
    {

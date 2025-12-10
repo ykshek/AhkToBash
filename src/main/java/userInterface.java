@@ -1,5 +1,7 @@
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -7,14 +9,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.swing.*;
 
-
-public class UI extends JFrame
+public class userInterface extends JFrame
 {
    DefaultListModel model = new DefaultListModel();
 
    public static void main(String[] args)
    {
-      UI frame = new UI();
+      userInterface frame = new userInterface();
       frame.setTitle("Autohotkey to ydotool bash script");
       frame.setVisible(true);
    }
@@ -22,12 +23,10 @@ public class UI extends JFrame
    private JList fileList;
    private JButton clear, convert, select;
    private JFileChooser fileChooser;
-
-   public UI ()
+   public userInterface()
    {
       final int DEFAULT_FRAME_WIDTH = 800;
       final int DEFAULT_FRAME_HEIGHT = 600;
-
       setSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
 
       JPanel panel_1 = new JPanel();
@@ -67,6 +66,7 @@ public class UI extends JFrame
    public static void updateList(DefaultListModel model) throws IOException
    {
       Path outputDirectory = FileSystems.getDefault().getPath("output").toAbsolutePath();
+      new File(outputDirectory.toUri()).mkdirs();
       java.util.List<String> fileList = Files
             .walk(outputDirectory)
             .filter(Files::isRegularFile)
@@ -142,7 +142,7 @@ public class UI extends JFrame
          }
          if (source == convert)
          {
-            Ahk_to_bash.convert();
+            ahkToBash.convert();
             try
             {
                Path outputDirectory = FileSystems.getDefault().getPath("output").toAbsolutePath();
