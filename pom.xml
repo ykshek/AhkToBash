@@ -7,6 +7,14 @@
     <groupId>com.github.ykshek.ahktobash</groupId>
     <artifactId>core</artifactId>
     <version>0.0.2</version>
+    <packaging>pom</packaging>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/ykshek/AhkToBash</url>
+        </repository>
+    </distributionManagement>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -46,12 +54,5 @@
     </build>
     <dependencies>
     </dependencies>
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/ykshek/AhkToBash</url>
-        </repository>
-    </distributionManagement>
 </project>
 
