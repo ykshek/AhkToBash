@@ -1,4 +1,5 @@
-name: Publish
+- name: Upload files to a GitHub release
+  uses: svenstaro/upload-release-action@2.11.3
 
 on:
   push:
@@ -22,4 +23,4 @@ jobs:
         asset_name: ahktobash-jar-with-dependencies.jar
         tag: ${{ github.ref }}
         overwrite: true
-        body: "New release"
+        file_glob: true
