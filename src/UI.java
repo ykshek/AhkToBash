@@ -33,9 +33,7 @@ public class UI extends JFrame
 
       setSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
 
-
       JPanel panel_1 = new JPanel();
-
       fileList = new JList(model);
       try
       {
