@@ -33,7 +33,7 @@ jobs:
       run: mvn deploy
                -DpomFile=./pom.xml
                -DrepositoryId=github
-               -Durl=https://maven.pkg.github.com/ykshek/AhkToBash
+               -Durl=https://maven.pkg.github.com/ykshek
                -Dtoken=GH_TOKEN
                -s $GITHUB_WORKSPACE/settings.xml
       env:
