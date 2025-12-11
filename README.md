@@ -18,3 +18,7 @@ either run with `java -jar 'ahktobash-jar-with-dependencies.jar'`
 or install as flatpak with `flatpak install --user com.github.ykshek.AhkToBash.flatpak`
 
 output is stored in `~/output` (yes I know I should be using xdg standards but oh well).
+
+## Note
+
+You may need to manually create an `~/output/` folder to run the program.
