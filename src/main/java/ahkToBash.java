@@ -46,17 +46,23 @@ public class ahkToBash
                   try
                   {
                      File shellScript = new File(filename + ".sh"); // Create File
-                     System.out.println("Converting:\t" + filename + ".sh");
+                     System.out.println("Converting:\t\t" + filename + ".sh");
                      OutputStream FileOut = new FileOutputStream(shellScript);
-                     String output = readFile(Path.of(filename), mapper)
+                     StringBuilder output = readFile(Path.of(filename), mapper)
                         .stream()
                         .map(keyStroke::toString)
-                        .reduce("", String::concat);
+                        //.reduce("", String::concat);
+                        .collect(StringBuilder::new,StringBuilder::append,StringBuilder::append);
+                     String finalOutput = output.toString();
                      FileOut.write("sleep 5\n".getBytes());
-                     FileOut.write(output.getBytes());
+                     FileOut.write(finalOutput.getBytes());
+                     System.out.println("Done converting:\t" + filename);
+                     Files.delete(Path.of(filename));
                   }
-                  catch (IOException e)
+                  catch (IOException | NumberFormatException e)
                   {
+                     System.out.println("Error occured while processing:");
+                     System.out.println("\t"+filename);
                      throw new RuntimeException(e);
                   }
                }

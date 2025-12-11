@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,11 +26,12 @@ public class userInterface extends JFrame
       frame.setVisible(true);
    }
 
+   private JTextArea textArea;
+   private PrintStream standardOut;
    private JPanel contentPane;
-   private JScrollPane scrollPane;
+   private JScrollPane scrollPane, scrollPane2;
    private JList fileList;
-   private JButton clear, convert, select;
-   private JFileChooser fileChooser;
+   private JButton clear, convert, select, refresh;
    public userInterface()
    {
       final int DEFAULT_FRAME_WIDTH = 800;
@@ -59,11 +62,29 @@ public class userInterface extends JFrame
 
       JPanel panel_3 = new JPanel();
       convert = new JButton("Convert");
+      refresh = new JButton("Refresh");
       clear = new JButton("Clear");
-      panel_3.setLayout(new GridLayout(1, 2));
+      panel_3.setLayout(new GridLayout(1, 3));
       panel_3.add(convert);
+      panel_3.add(refresh);
       panel_3.add(clear);
       contentPane.add(panel_3, "East");
+
+      JPanel panel_4 = new JPanel();
+      textArea = new JTextArea(40, 100);
+      textArea.setEditable(false);
+      PrintStream printStream = new PrintStream(new CustomOutputStream(textArea));
+         //@author www.codejava.net
+         // keeps reference of standard output stream
+         standardOut = System.out;
+         // re-assigns standard output stream and error output stream
+         System.setOut(printStream);
+         System.setErr(printStream);
+         //@author www.codejava.net
+      scrollPane2 = new JScrollPane();
+      scrollPane2.setViewportView(textArea);
+      panel_4.add(scrollPane2);
+      contentPane.add(panel_4,"South");
 
       add(contentPane);
       ActionListener listener = new MyListener();
@@ -181,6 +202,17 @@ public class userInterface extends JFrame
             {
                throw new RuntimeException(e);
             }
+         }
+         if (source == refresh)
+         {
+             try
+             {
+                updateList(model);
+             }
+             catch (IOException e)
+             {
+                throw new RuntimeException(e);
+             }
          }
       }
    }
