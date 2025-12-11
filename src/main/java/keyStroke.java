@@ -25,6 +25,7 @@ public class keyStroke
          case "combined" -> {return "ydotool key "+keyCode+":1\n"+"ydotool key "+keyCode+":0\n";}
          case "separate" -> {return "ydotool key "+keyCode+":"+upDown+"\n";}
          case "delay" -> {return "sleep ."+Integer.toString(delay)+"\n";}
+         case "invalid" -> {return "";} //return an empty string(i.e. skip it) if it is invalid
          default -> {throw new RuntimeException();}
       }
    }

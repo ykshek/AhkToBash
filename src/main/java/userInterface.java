@@ -8,7 +8,9 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.GraphicsEnvironment;
+import java.util.stream.Collectors;
 
 public class userInterface extends JFrame
 {
@@ -22,6 +24,8 @@ public class userInterface extends JFrame
       frame.setVisible(true);
    }
 
+   private JPanel contentPane;
+   private JScrollPane scrollPane;
    private JList fileList;
    private JButton clear, convert, select;
    private JFileChooser fileChooser;
@@ -30,9 +34,13 @@ public class userInterface extends JFrame
       final int DEFAULT_FRAME_WIDTH = 800;
       final int DEFAULT_FRAME_HEIGHT = 600;
       setSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
+      contentPane = new JPanel();
+      contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
       JPanel panel_1 = new JPanel();
       fileList = new JList(model);
+      scrollPane = new JScrollPane();
+      scrollPane.setViewportView(fileList);
       try
       {
          updateList(model);
@@ -41,13 +49,13 @@ public class userInterface extends JFrame
       {
          throw new RuntimeException(e);
       }
-      panel_1.add(fileList);
-      add(panel_1, "North");
+      panel_1.add(scrollPane);
+      contentPane.add(panel_1, "West");
 
       JPanel panel_2 = new JPanel();
       select = new JButton("Select");
       panel_2.add(select);
-      add(panel_2, "Center");
+      contentPane.add(panel_2, "Center");
 
       JPanel panel_3 = new JPanel();
       convert = new JButton("Convert");
@@ -55,8 +63,9 @@ public class userInterface extends JFrame
       panel_3.setLayout(new GridLayout(1, 2));
       panel_3.add(convert);
       panel_3.add(clear);
-      add(panel_3, "South");
+      contentPane.add(panel_3, "East");
 
+      add(contentPane);
       ActionListener listener = new MyListener();
       select.addActionListener(listener);
       clear.addActionListener(listener);
@@ -71,6 +80,8 @@ public class userInterface extends JFrame
       new File(outputDirectory.toUri()).mkdirs();
       java.util.List<String> fileList = Files
             .walk(outputDirectory)
+            .collect(Collectors.toList())
+            .parallelStream()
             .filter(Files::isRegularFile)
             .map(Path::toString)
             .filter(string -> string.endsWith(".ahk"))
@@ -125,6 +136,8 @@ public class userInterface extends JFrame
                Path outputDirectory = FileSystems.getDefault().getPath("output").toAbsolutePath();
                java.util.List<String> fileList = Files
                      .walk(outputDirectory)
+                     .collect(Collectors.toList())
+                     .parallelStream()
                      .filter(Files::isRegularFile)
                      .map(Path::toString)
                      .filter(string -> string.endsWith(".ahk"))
@@ -132,7 +145,7 @@ public class userInterface extends JFrame
                for (String filename : fileList)
                {
                   String deleting = filename;
-                  System.out.println("Deleteing:\t" + deleting);
+                  System.out.println("Deleting:\t" + deleting);
                   Files.delete(Path.of(deleting));
                }
                updateList(model);
@@ -150,6 +163,8 @@ public class userInterface extends JFrame
                Path outputDirectory = FileSystems.getDefault().getPath("output").toAbsolutePath();
                java.util.List<String> fileList = Files
                      .walk(outputDirectory)
+                     .collect(Collectors.toList())
+                     .parallelStream()
                      .filter(Files::isRegularFile)
                      .map(Path::toString)
                      .filter(string -> string.endsWith(".ahk"))

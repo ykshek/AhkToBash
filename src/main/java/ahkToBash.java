@@ -3,6 +3,7 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ahkToBash
@@ -21,14 +22,9 @@ public class ahkToBash
          }
          if (Objects.equals(token[0], "Sleep"))
             return new keyStroke("delay", -1, Integer.parseInt(token[1]), "");
-         return null;
+         return new keyStroke("invalid",-1, -1, "");
       };
 
-      Path currentDirectory =
-         FileSystems
-            .getDefault()
-            .getPath("")
-            .toAbsolutePath();
       Path outputDirectory =
          FileSystems
             .getDefault()
@@ -40,6 +36,8 @@ public class ahkToBash
       {
          Files
             .walk(outputDirectory)
+            .collect(Collectors.toList())
+            .parallelStream()
             .filter(Files::isRegularFile)
             .map(Path::toString)
             .filter(string -> string.endsWith(".ahk"))
@@ -76,7 +74,8 @@ public class ahkToBash
       try (Stream<String> lines = Files.lines(filename))
       {
          list = lines.map(mapper).toList();
-      } catch (IOException e)
+      }
+      catch (IOException e)
       {
          System.err.println("Error in accessing datafile " + filename);
          System.exit(1);
