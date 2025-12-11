@@ -16,7 +16,7 @@ public class userInterface extends JFrame
 
    public static void main(String[] args)
    {
-      System.out.println(GraphicsEnvironment.isHeadless());
+      System.out.println("Headless Java: "+GraphicsEnvironment.isHeadless());
       userInterface frame = new userInterface();
       frame.setTitle("Autohotkey to ydotool bash script");
       frame.setVisible(true);

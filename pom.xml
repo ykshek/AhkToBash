@@ -6,7 +6,7 @@
 
     <groupId>com.github.ykshek.ahktobash</groupId>
     <artifactId>ahktobash</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.10</version>
     <packaging>jar</packaging>
     <distributionManagement>
         <repository>
