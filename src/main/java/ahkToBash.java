@@ -12,17 +12,24 @@ public class ahkToBash
    {
       Function<String, keyStroke> mapper = line ->
       {
-         String[] token = line.split("[\\s,{}\n]+");
-         if (Objects.equals(token[0], "SendInput"))
+         try
          {
-            if (token.length == 3)
-               return new keyStroke("separate", 200 + token[1].charAt(6) - 48, -1, token[2] );
-            else
-               return new keyStroke("combined", 200 + token[1].charAt(6) - 48, -1, "");
-         }
-         if (Objects.equals(token[0], "Sleep"))
-            return new keyStroke("delay", -1, Integer.parseInt(token[1]), "");
-         return new keyStroke("invalid",-1, -1, "");
+            String[] token = line.split("[\\s,{}\n]+");
+            if (Objects.equals(token[0], "SendInput"))
+            {
+               if (token.length == 3)
+                  return new keyStroke("separate", 200 + token[1].charAt(token[1].length()-1) - 48, -1, token[2] );
+               if (token.length == 2)
+                  return new keyStroke("combined", 200 + token[1].charAt(token[1].length()-1) - 48, -1, "");
+            }
+            if (Objects.equals(token[0], "Sleep") && token.length == 2)
+               return new keyStroke("delay", -1, Integer.parseInt(token[1]), "");
+          }
+          catch (NumberFormatException | ArrayIndexOutOfBoundsException e)
+          {
+             return new keyStroke("invalid",-1, -1, "");
+          }
+          return new keyStroke("invalid",-1, -1, "");
       };
 
       Path outputDirectory =
@@ -31,7 +38,6 @@ public class ahkToBash
             .getPath("output")
             .toAbsolutePath();
       new File(outputDirectory.toUri()).mkdirs();
-      System.out.println(outputDirectory);
       try
       {
          Files
@@ -51,7 +57,6 @@ public class ahkToBash
                      StringBuilder output = readFile(Path.of(filename), mapper)
                         .stream()
                         .map(keyStroke::toString)
-                        //.reduce("", String::concat);
                         .collect(StringBuilder::new,StringBuilder::append,StringBuilder::append);
                      String finalOutput = output.toString();
                      FileOut.write("sleep 5\n".getBytes());
@@ -67,6 +72,7 @@ public class ahkToBash
                   }
                }
             );
+         System.out.println("DONE CONVERTING!");
       }
       catch (IOException e)
       {

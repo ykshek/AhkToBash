@@ -97,23 +97,23 @@ public class userInterface extends JFrame
 
    public static void updateList(DefaultListModel model) throws IOException
    {
-      Path outputDirectory = FileSystems.getDefault().getPath("output").toAbsolutePath();
-      new File(outputDirectory.toUri()).mkdirs();
-      java.util.List<String> fileList = Files
-            .walk(outputDirectory)
-            .collect(Collectors.toList())
-            .parallelStream()
-            .filter(Files::isRegularFile)
-            .map(Path::toString)
-            .filter(string -> string.endsWith(".ahk"))
-            .toList();
-      model.removeAllElements();
-      int i = 0;
-      for (String filename : fileList)
-      {
-         model.add(i,filename);
-         i++;
-      }
+       Path outputDirectory = FileSystems.getDefault().getPath("output").toAbsolutePath();
+       new File(outputDirectory.toUri()).mkdirs();
+       java.util.List<String> fileList = Files
+              .walk(outputDirectory)
+              .toList()
+              .parallelStream()
+              .filter(Files::isRegularFile)
+              .map(Path::toString)
+              .filter(string -> string.endsWith(".ahk"))
+              .toList();
+        model.removeAllElements();
+        int i = 0;
+        for (String filename : fileList)
+        {
+           model.add(i,filename);
+           i++;
+        }
    }
 
    private class MyListener implements ActionListener
@@ -133,7 +133,6 @@ public class userInterface extends JFrame
             dialog.dispose();
             for (File file : fileList)
             {
-               System.out.println(file + " chosen.");
                Path outputDirectory = FileSystems.getDefault().getPath("output/").toAbsolutePath();
                String output = outputDirectory + "/" + file.getName();
                new File(outputDirectory.toUri()).mkdirs();
@@ -142,13 +141,22 @@ public class userInterface extends JFrame
                   System.out.println("Copying from:\t" + file);
                   System.out.println("Copying to:\t" + Path.of(output));
                   java.nio.file.Files.copy(file.toPath(), Path.of(output));
-                  updateList(model);
                }
                catch (IOException e)
                {
+                  System.out.println("Error occurred while copying:\t" + file);
                   throw new RuntimeException(e);
                }
             }
+            try
+            {
+                updateList(model);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+            System.out.println("DONE COPYING!");
          }
          if (source == clear)
          {
@@ -157,15 +165,14 @@ public class userInterface extends JFrame
                Path outputDirectory = FileSystems.getDefault().getPath("output").toAbsolutePath();
                java.util.List<String> fileList = Files
                      .walk(outputDirectory)
-                     .collect(Collectors.toList())
+                     .toList()
                      .parallelStream()
                      .filter(Files::isRegularFile)
                      .map(Path::toString)
                      .filter(string -> string.endsWith(".ahk"))
                      .toList();
-               for (String filename : fileList)
+               for (String deleting : fileList)
                {
-                  String deleting = filename;
                   System.out.println("Deleting:\t" + deleting);
                   Files.delete(Path.of(deleting));
                }
@@ -184,15 +191,14 @@ public class userInterface extends JFrame
                Path outputDirectory = FileSystems.getDefault().getPath("output").toAbsolutePath();
                java.util.List<String> fileList = Files
                      .walk(outputDirectory)
-                     .collect(Collectors.toList())
+                     .toList()
                      .parallelStream()
                      .filter(Files::isRegularFile)
                      .map(Path::toString)
                      .filter(string -> string.endsWith(".ahk"))
                      .toList();
-               for (String filename : fileList)
+               for (String deleting : fileList)
                {
-                  String deleting = filename;
                   System.out.println("Deleting:\t" + deleting);
                   Files.delete(Path.of(deleting));
                }

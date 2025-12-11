@@ -12,8 +12,8 @@ public class keyStroke
       type = t;
       keyCode = k;
       delay = d;
-      if (Objects.equals(u, "up")) upDown = "0";
-      else if (Objects.equals(u, "down")) upDown = "1";
+      if (u.contains("up")) upDown = "0";
+      else if (u.contains("down")) upDown = "1";
       else upDown = u;
    }
 
