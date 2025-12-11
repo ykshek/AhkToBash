@@ -6,7 +6,7 @@
 
     <groupId>com.github.ykshek</groupId>
     <artifactId>ahktobash</artifactId>
-    <version>0.0.13</version>
+    <version>0.0.16</version>
     <packaging>jar</packaging>
     <distributionManagement>
         <repository>
@@ -49,6 +49,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>                   
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
